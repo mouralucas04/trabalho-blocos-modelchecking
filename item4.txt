@@ -1,0 +1,354 @@
+Plano para questão 1 do estado S0 para o estado Sf1:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification AG (a_pos = on_d_pos5 -> d_pos = t4)  is true
+-- specification AG (b_pos = on_d_pos6 -> d_pos = t4)  is true
+-- specification AG (d_pos = on_a_and_b -> (a_pos = t4 & b_pos = t6))  is true
+-- specification AG (c_pos = on_above_a_b -> (a_pos = on_d_pos5 & b_pos = on_d_pos6))  is true
+-- specification !(EF GOAL_Sf1)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = t4
+    b_pos = t6
+    c_pos = t1
+    d_pos = on_a_and_b
+    step = 0
+    GOAL_Sf1 = FALSE
+    c_on_above_ab = FALSE
+    b_on_d_pos6 = FALSE
+    a_on_d_pos5 = FALSE
+    d_on_a_b = TRUE
+    d_on_table_at_4 = FALSE
+  -> State: 1.2 <-
+    d_pos = on_c_pos1
+    step = 1
+    d_on_a_b = FALSE
+  -> State: 1.3 <-
+    a_pos = on_b_pos6
+    step = 2
+  -> State: 1.4 <-
+    d_pos = t3
+    step = 3
+  -> State: 1.5 <-
+    a_pos = on_c_pos1
+    step = 4
+  -> State: 1.6 <-
+    b_pos = on_c_pos2
+    step = 5
+  -> State: 1.7 <-
+    d_pos = t4
+    step = 6
+    d_on_table_at_4 = TRUE
+  -> State: 1.8 <-
+    a_pos = on_d_pos5
+    step = 7
+    a_on_d_pos5 = TRUE
+  -> State: 1.9 <-
+    b_pos = on_d_pos6
+    step = 8
+    b_on_d_pos6 = TRUE
+  -> State: 1.10 <-
+    c_pos = on_above_a_b
+    step = 9
+    GOAL_Sf1 = TRUE
+    c_on_above_ab = TRUE
+
+Plano para questão 1 do estado S0 para o estado Sf2:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification !(EF GOAL_Sf2)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = t4
+    b_pos = t6
+    c_pos = t1
+    d_pos = on_a_and_b
+    step = 0
+    GOAL_Sf2 = FALSE
+  -> State: 1.2 <-
+    d_pos = on_c_pos1
+    step = 1
+  -> State: 1.3 <-
+    a_pos = on_b_pos6
+    step = 2
+  -> State: 1.4 <-
+    d_pos = t3
+    step = 3
+  -> State: 1.5 <-
+    a_pos = on_c_pos1
+    step = 4
+  -> State: 1.6 <-
+    b_pos = on_c_pos2
+    step = 5
+  -> State: 1.7 <-
+    d_pos = t4
+    step = 6
+  -> State: 1.8 <-
+    b_pos = t3
+    step = 7
+  -> State: 1.9 <-
+    a_pos = on_b_pos3
+    step = 8
+  -> State: 1.10 <-
+    c_pos = on_d_pos5
+    step = 9
+  -> State: 1.11 <-
+    a_pos = on_c_pos5
+    step = 10
+  -> State: 1.12 <-
+    b_pos = on_c_pos6
+    step = 11
+    GOAL_Sf2 = TRUE
+
+Plano para questão 1 do estado S0 para o estado Sf3:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification !(EF GOAL_Sf3)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = t4
+    b_pos = t6
+    c_pos = t1
+    d_pos = on_a_and_b
+    step = 0
+    GOAL_Sf3 = FALSE
+  -> State: 1.2 <-
+    d_pos = on_c_pos1
+    step = 1
+  -> State: 1.3 <-
+    a_pos = on_b_pos6
+    step = 2
+  -> State: 1.4 <-
+    d_pos = t3
+    step = 3
+  -> State: 1.5 <-
+    a_pos = on_c_pos2
+    step = 4
+  -> State: 1.6 <-
+    b_pos = on_c_pos1
+    step = 5
+  -> State: 1.7 <-
+    d_pos = t4
+    step = 6
+  -> State: 1.8 <-
+    a_pos = t3
+    step = 7
+  -> State: 1.9 <-
+    d_pos = on_c_a_pos2
+    step = 8
+  -> State: 1.10 <-
+    b_pos = t6
+    step = 9
+  -> State: 1.11 <-
+    d_pos = on_c_a_pos1
+    step = 10
+    GOAL_Sf3 = TRUE
+
+Plano para questão 1 do estado S0 para o estado Sf4:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification AG (d_pos = on_c_pos1_3 -> c_pos = t1)  is true
+-- specification AG (a_pos = on_c_pos1 -> c_pos = t1)  is true
+-- specification AG (d_pos = on_a_b_pos4_6 -> (a_pos = t4 & b_pos = t6))  is true
+-- specification !(EF GOAL_S4)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = t4
+    b_pos = t6
+    c_pos = t1
+    d_pos = on_a_b_pos4_6
+    step = 0
+    GOAL_S4 = FALSE
+  -> State: 1.2 <-
+    d_pos = on_c_pos1_3
+    step = 1
+  -> State: 1.3 <-
+    a_pos = on_b_pos6
+    step = 2
+  -> State: 1.4 <-
+    d_pos = t3
+    step = 3
+  -> State: 1.5 <-
+    a_pos = on_c_pos1
+    step = 4
+    GOAL_S4 = TRUE
+
+
+Plano para questão 2:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification AG (a_pos = on_c_pos1 -> c_pos = t1)  is true
+-- specification AG (b_pos = on_c_pos2 -> c_pos = t1)  is true
+-- specification AG (c_pos = on_d_pos5_6 -> d_pos = t4)  is true
+-- specification AG (a_pos = on_c_pos5 -> c_pos = on_d_pos5_6)  is true
+-- specification AG (b_pos = on_c_pos6 -> c_pos = on_d_pos5_6)  is true
+-- specification !(EF GOAL_S5)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = on_c_pos1
+    b_pos = on_c_pos2
+    c_pos = t1
+    d_pos = t4
+    step = 0
+    GOAL_S5 = FALSE
+    b_on_c_pos6 = FALSE
+    a_on_c_pos5 = FALSE
+    c_on_d = FALSE
+  -> State: 1.2 <-
+    b_pos = t3
+    step = 1
+  -> State: 1.3 <-
+    a_pos = on_b_pos3
+    step = 2
+  -> State: 1.4 <-
+    c_pos = on_d_pos5_6
+    step = 3
+    c_on_d = TRUE
+  -> State: 1.5 <-
+    a_pos = on_c_pos5
+    step = 4
+    a_on_c_pos5 = TRUE
+  -> State: 1.6 <-
+    b_pos = on_c_pos6
+    step = 5
+    GOAL_S5 = TRUE
+    b_on_c_pos6 = TRUE
+
+
+Plano para questão 3:
+
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 15:48:16 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification AG (d_pos = on_c_pos1_3 -> c_pos = t1)  is true
+-- specification AG (a_pos = on_c_pos1 -> c_pos = t1)  is true
+-- specification AG (b_pos = on_c_pos2 -> c_pos = t1)  is true
+-- specification AG (d_pos = on_a_b_pos4_6 -> (a_pos = t4 & b_pos = t6))  is true
+-- specification !(EF GOAL_S6)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    a_pos = t4
+    b_pos = t6
+    c_pos = t1
+    d_pos = on_a_b_pos4_6
+    step = 0
+    GOAL_S6 = FALSE
+  -> State: 1.2 <-
+    d_pos = on_c_pos1_3
+    step = 1
+  -> State: 1.3 <-
+    a_pos = on_b_pos6
+    step = 2
+  -> State: 1.4 <-
+    d_pos = t3
+    step = 3
+  -> State: 1.5 <-
+    a_pos = on_c_pos1
+    step = 4
+  -> State: 1.6 <-
+    b_pos = on_c_pos2
+    step = 5
+  -> State: 1.7 <-
+    d_pos = t4
+    step = 6
+    GOAL_S6 = TRUE

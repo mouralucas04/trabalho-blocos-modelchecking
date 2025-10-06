@@ -1,0 +1,113 @@
+-- Modelo NuSMV para a Situação 1 (tamanhos variados) — nova sequência de 9 passos
+-- Estado inicial S0 corrigido:
+--  c na mesa 1-2; a na mesa slot 4; b na mesa slot 6; d está acima de a e b (ocupando 4-6 num nível acima).
+-- Novo plano: sequência de 9 movimentos até Sf1.
+
+MODULE main
+
+VAR
+  -- posições para blocos de tamanho 1
+  a_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1, on_c_pos2, on_b_pos6,
+            on_unknown };
+  b_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1, on_c_pos2,
+            on_unknown };
+  -- c (size 2): leftmost table slot when on table, ou stacked
+  c_pos : { t1, t2, t3, t4, t5, t6, on_above_a_b };
+  -- d (size 3): table ou apoiado
+  d_pos : { t1, t2, t3, t4,
+            on_a_and_b,
+            on_c_pos1,
+            on_unknown };
+
+  -- contador determinístico de passos
+  step : 0..9;
+
+DEFINE
+  d_on_table_at_4 := (d_pos = t4);
+  d_on_a_b        := (d_pos = on_a_and_b);
+  a_on_d_pos5     := (a_pos = on_d_pos5);
+  b_on_d_pos6     := (b_pos = on_d_pos6);
+  c_on_above_ab   := (c_pos = on_above_a_b);
+
+  GOAL_Sf1 := d_on_table_at_4 & a_on_d_pos5 & b_on_d_pos6 & c_on_above_ab;
+
+ASSIGN
+  -- estado inicial (S0 corrigido)
+  init(a_pos) := t4;             -- a na mesa slot 4
+  init(b_pos) := t6;             -- b na mesa slot 6
+  init(c_pos) := t1;             -- c na mesa slots 1-2
+  init(d_pos) := on_a_and_b;     -- d sobre a e b (ocupando 4-6 acima)
+  init(step)  := 0;
+
+  -- avanço determinístico de passos
+  next(step) := case
+    step = 0 : 1;
+    step = 1 : 2;
+    step = 2 : 3;
+    step = 3 : 4;
+    step = 4 : 5;
+    step = 5 : 6;
+    step = 6 : 7;
+    step = 7 : 8;
+    step = 8 : 9;
+    step = 9 : 9;
+    TRUE     : step;
+  esac;
+
+  -- Movimentos
+  -- Step 0 -> 1 : colocar d em cima de c (posição t1)
+  next(d_pos) := case
+    step = 0 : on_c_pos1;
+    step = 2 : t3;     -- Step 2 -> 3 : mover d para mesa em t3
+    step = 5 : t4;     -- Step 5 -> 6 : mover d para mesa em t4
+    step >= 6 : d_pos;
+    TRUE      : d_pos;
+  esac;
+
+  -- Step 1 -> 2 : colocar a em cima de b (pos=6)
+  -- Step 3 -> 4 : colocar a em cima de c (pos=1)
+  -- Step 6 -> 7 : colocar a em cima de d (pos=5)
+  next(a_pos) := case
+    step = 1 : on_b_pos6;
+    step = 3 : on_c_pos1;
+    step = 6 : on_d_pos5;
+    step >= 7 : a_pos;
+    TRUE      : a_pos;
+  esac;
+
+  -- Step 4 -> 5 : colocar b em cima de c (pos=2)
+  -- Step 7 -> 8 : colocar b em cima de d (pos=6)
+  next(b_pos) := case
+    step = 4 : on_c_pos2;
+    step = 7 : on_d_pos6;
+    step >= 8 : b_pos;
+    TRUE      : b_pos;
+  esac;
+
+  -- Step 8 -> 9 : colocar c em cima de a e b (ocupando 5-6 acima)
+  next(c_pos) := case
+    step = 8 : on_above_a_b;
+    step >= 9 : c_pos;
+    TRUE      : c_pos;
+  esac;
+
+-- invariantes (ajudas para depuração)
+CTLSPEC
+  AG ( (d_pos = on_a_and_b) -> (a_pos = t4 & b_pos = t6) )
+
+CTLSPEC
+  AG ( (a_pos = on_d_pos5) -> (d_pos = t4) )
+
+CTLSPEC
+  AG ( (b_pos = on_d_pos6) -> (d_pos = t4) )
+
+CTLSPEC
+  AG ( (c_pos = on_above_a_b) -> (a_pos = on_d_pos5 & b_pos = on_d_pos6) )
+
+-- planejamento como model checking
+CTLSPEC
+  ! EF GOAL_Sf1

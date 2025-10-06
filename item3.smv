@@ -1,0 +1,88 @@
+-- Situacao3_blocos_tam_variavel_FIXED.smv
+-- Planejamento manual (S0 → S6)
+-- Corrigido: cada variável tem apenas um bloco ASSIGN next()
+
+MODULE main
+
+VAR
+  a_pos : { t1, t2, t3, t4, t5, t6, on_b_pos6, on_c_pos1, on_c_pos2, on_unknown };
+  b_pos : { t1, t2, t3, t4, t5, t6, on_c_pos1, on_c_pos2, on_unknown };
+  c_pos : { t1, t2, t3, t4, t5, t6, on_unknown };
+  d_pos : { t1, t2, t3, t4, t5, t6, on_a_b_pos4_6, on_c_pos1_3, on_unknown };
+  step  : 0..6;
+
+DEFINE
+  GOAL_S6 := (d_pos = t4) &
+             (a_pos = on_c_pos1) &
+             (b_pos = on_c_pos2) &
+             (c_pos = t1);
+
+ASSIGN
+  ------------------------------------------------------------------
+  -- Initial state (S0)
+  ------------------------------------------------------------------
+  init(a_pos) := t4;             -- a on table slot 4
+  init(b_pos) := t6;             -- b on table slot 6
+  init(c_pos) := t1;             -- c on table slots 1–2
+  init(d_pos) := on_a_b_pos4_6;  -- d supported by a and b (4–6)
+  init(step)  := 0;
+
+  ------------------------------------------------------------------
+  -- Step counter evolution
+  ------------------------------------------------------------------
+  next(step) := case
+    step = 0 : 1;
+    step = 1 : 2;
+    step = 2 : 3;
+    step = 3 : 4;
+    step = 4 : 5;
+    step = 5 : 6;
+    step = 6 : 6;
+    TRUE     : step;
+  esac;
+
+  ------------------------------------------------------------------
+  -- a_pos transitions (merged all steps)
+  ------------------------------------------------------------------
+  next(a_pos) := case
+    step = 1 : on_b_pos6;   -- move(a,on(b,pos=6))
+    step = 3 : on_c_pos1;   -- move(a,on(c,pos=1))
+    step >= 4 : a_pos;
+    TRUE : a_pos;
+  esac;
+
+  ------------------------------------------------------------------
+  -- b_pos transitions
+  ------------------------------------------------------------------
+  next(b_pos) := case
+    step = 4 : on_c_pos2;   -- move(b,on(c,pos=2))
+    step >= 5 : b_pos;
+    TRUE : b_pos;
+  esac;
+
+  ------------------------------------------------------------------
+  -- c_pos transitions (none moved in this plan)
+  ------------------------------------------------------------------
+  next(c_pos) := c_pos;
+
+  ------------------------------------------------------------------
+  -- d_pos transitions (merged)
+  ------------------------------------------------------------------
+  next(d_pos) := case
+    step = 0 : on_c_pos1_3; -- move(d,on(c,pos=1–3))
+    step = 2 : t3;          -- move(d,table at 3)
+    step = 5 : t4;          -- move(d,table at 4)
+    step >= 6 : d_pos;
+    TRUE : d_pos;
+  esac;
+
+-- Consistency invariants (optional checks)
+CTLSPEC AG( (d_pos = on_a_b_pos4_6) -> (a_pos = t4 & b_pos = t6) )
+CTLSPEC AG( (d_pos = on_c_pos1_3) -> (c_pos = t1) )
+CTLSPEC AG( (a_pos = on_c_pos1) -> (c_pos = t1) )
+CTLSPEC AG( (b_pos = on_c_pos2) -> (c_pos = t1) )
+
+-- Planning property: negated reachability, to get plan as counterexample
+CTLSPEC
+  ! EF GOAL_S6
+

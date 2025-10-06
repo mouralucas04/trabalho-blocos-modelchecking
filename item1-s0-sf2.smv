@@ -1,0 +1,89 @@
+-- Modelo NuSMV — Plano de 11 passos para Sf2
+-- Estado inicial S0: c em t1-2, a em t4, b em t6, d em cima de a e b
+-- Objetivo Sf2: d em t4, c em cima de d em t5, a em cima de c em t5, b em cima de c em t6
+
+MODULE main
+
+VAR
+  a_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1, on_c_pos2, on_c_pos5,
+            on_b_pos6, on_b_pos3,
+            on_unknown };
+  b_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1, on_c_pos2, on_c_pos6,
+            on_unknown };
+  c_pos : { t1, t2, t3, t4, t5, t6,
+            on_above_a_b, on_d_pos5 };
+  d_pos : { t1, t2, t3, t4,
+            on_a_and_b, on_c_pos1,
+            on_unknown };
+
+  step : 0..11;
+
+DEFINE
+  GOAL_Sf2 := (d_pos = t4) & (c_pos = on_d_pos5)
+               & (a_pos = on_c_pos5) & (b_pos = on_c_pos6);
+
+ASSIGN
+  init(a_pos) := t4;
+  init(b_pos) := t6;
+  init(c_pos) := t1;
+  init(d_pos) := on_a_and_b;
+  init(step)  := 0;
+
+  next(step) := case
+    step = 0 : 1;
+    step = 1 : 2;
+    step = 2 : 3;
+    step = 3 : 4;
+    step = 4 : 5;
+    step = 5 : 6;
+    step = 6 : 7;
+    step = 7 : 8;
+    step = 8 : 9;
+    step = 9 : 10;
+    step = 10: 11;
+    step = 11: 11;
+    TRUE     : step;
+  esac;
+
+  -- d: passo 0->1 em cima de c(t1), passo 2->3 t3, passo 5->6 t4
+  next(d_pos) := case
+    step = 0 : on_c_pos1;
+    step = 2 : t3;
+    step = 5 : t4;
+    step >= 6 : d_pos;
+    TRUE      : d_pos;
+  esac;
+
+  -- a: passo 1->2 em cima de b(t6), 3->4 em cima de c(t1), 7->8 em cima de b(t3), 9->10 em cima de c(t5)
+  next(a_pos) := case
+    step = 1 : on_b_pos6;
+    step = 3 : on_c_pos1;
+    step = 7 : on_b_pos3;
+    step = 9 : on_c_pos5;
+    step >= 10 : a_pos;
+    TRUE       : a_pos;
+  esac;
+
+  -- b: passo 4->5 em cima de c(t2), 6->7 mesa t3, 10->11 em cima de c(t6)
+  next(b_pos) := case
+    step = 4 : on_c_pos2;
+    step = 6 : t3;
+    step = 10: on_c_pos6;
+    step >= 11: b_pos;
+    TRUE      : b_pos;
+  esac;
+
+  -- c: passo 8->9 em cima de d (t5)
+  next(c_pos) := case
+    step = 8 : on_d_pos5;
+    step >= 9 : c_pos;
+    TRUE      : c_pos;
+  esac;
+
+-- Especificação de planejamento
+CTLSPEC
+  ! EF GOAL_Sf2

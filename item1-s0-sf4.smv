@@ -1,0 +1,82 @@
+-- situacao1_blocos_tam_variavel_FIXED.smv
+-- Planejamento manual (S0 → S4)
+-- Mundo dos blocos com tamanhos variados
+-- Corrigido: cada variável tem apenas um bloco ASSIGN next()
+
+MODULE main
+
+VAR
+  a_pos : { t1, t2, t3, t4, t5, t6,
+            on_b_pos6, on_c_pos1, on_unknown };
+  b_pos : { t1, t2, t3, t4, t5, t6, on_unknown };
+  c_pos : { t1, t2, t3, t4, t5, t6, on_unknown };
+  d_pos : { t1, t2, t3, t4, t5, t6,
+            on_a_b_pos4_6, on_c_pos1_3, on_unknown };
+
+  step : 0..4;
+
+DEFINE
+  GOAL_S4 := (c_pos = t1) &
+             (d_pos = t3) &
+             (a_pos = on_c_pos1) &
+             (b_pos = t6);
+
+ASSIGN
+  ------------------------------------------------------------------
+  -- Estado inicial S0
+  ------------------------------------------------------------------
+  init(a_pos) := t4;             -- a na mesa slot 4
+  init(b_pos) := t6;             -- b na mesa slot 6
+  init(c_pos) := t1;             -- c na mesa (1–2)
+  init(d_pos) := on_a_b_pos4_6;  -- d sobre a e b (4–6)
+  init(step)  := 0;
+
+  ------------------------------------------------------------------
+  -- Avanço determinístico dos passos (S0 → S4)
+  ------------------------------------------------------------------
+  next(step) := case
+    step = 0 : 1;
+    step = 1 : 2;
+    step = 2 : 3;
+    step = 3 : 4;
+    step = 4 : 4;
+    TRUE     : step;
+  esac;
+
+  ------------------------------------------------------------------
+  -- a_pos transições
+  ------------------------------------------------------------------
+  next(a_pos) := case
+    step = 1 : on_b_pos6;   -- move(a, on(b,pos=6))
+    step = 3 : on_c_pos1;   -- move(a, on(c,pos=1))
+    TRUE : a_pos;
+  esac;
+
+  ------------------------------------------------------------------
+  -- b_pos permanece fixo (em t6)
+  ------------------------------------------------------------------
+  next(b_pos) := b_pos;
+
+  ------------------------------------------------------------------
+  -- c_pos permanece fixo (em t1)
+  ------------------------------------------------------------------
+  next(c_pos) := c_pos;
+
+  ------------------------------------------------------------------
+  -- d_pos transições
+  ------------------------------------------------------------------
+  next(d_pos) := case
+    step = 0 : on_c_pos1_3; -- move(d, on(c,pos=1–3))
+    step = 2 : t3;          -- move(d, table at 3)
+    TRUE : d_pos;
+  esac;
+
+-- Invariantes de consistência
+CTLSPEC AG( (d_pos = on_a_b_pos4_6) -> (a_pos = t4 & b_pos = t6) )
+CTLSPEC AG( (d_pos = on_c_pos1_3) -> (c_pos = t1) )
+CTLSPEC AG( (a_pos = on_c_pos1) -> (c_pos = t1) )
+
+-- Especificação de planejamento (gera o contraexemplo = plano)
+CTLSPEC
+  ! EF GOAL_S4
+

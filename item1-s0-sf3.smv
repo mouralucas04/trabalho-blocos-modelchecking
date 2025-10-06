@@ -1,0 +1,84 @@
+-- Modelo NuSMV — Plano de 10 passos para Sf3
+-- Estado inicial S0: c em t1-2, a em t4, b em t6, d em cima de a e b
+-- Objetivo Sf3: d em cima de c e a em pos t1, a em t3, b em t6, c em t1
+
+MODULE main
+
+VAR
+  a_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1, on_c_pos2,
+            on_b_pos6,
+            on_unknown };
+  b_pos : { t1, t2, t3, t4, t5, t6,
+            on_d_pos5, on_d_pos6,
+            on_c_pos1,
+            on_unknown };
+  c_pos : { t1, t2, t3, t4, t5, t6 };
+  d_pos : { t1, t2, t3, t4,
+            on_a_and_b,
+            on_c_pos1,
+            on_c_a_pos1, on_c_a_pos2,
+            on_unknown };
+
+  step : 0..10;
+
+DEFINE
+  GOAL_Sf3 := (d_pos = on_c_a_pos1) & (a_pos = t3) & (b_pos = t6) & (c_pos = t1);
+
+ASSIGN
+  init(a_pos) := t4;
+  init(b_pos) := t6;
+  init(c_pos) := t1;
+  init(d_pos) := on_a_and_b;
+  init(step)  := 0;
+
+  next(step) := case
+    step = 0 : 1;
+    step = 1 : 2;
+    step = 2 : 3;
+    step = 3 : 4;
+    step = 4 : 5;
+    step = 5 : 6;
+    step = 6 : 7;
+    step = 7 : 8;
+    step = 8 : 9;
+    step = 9 : 10;
+    step = 10: 10;
+    TRUE     : step;
+  esac;
+
+  -- D
+  next(d_pos) := case
+    step = 0 : on_c_pos1;
+    step = 2 : t3;
+    step = 5 : t4;
+    step = 7 : on_c_a_pos2;
+    step = 9 : on_c_a_pos1;
+    step >= 10: d_pos;
+    TRUE      : d_pos;
+  esac;
+
+  -- A
+  next(a_pos) := case
+    step = 1 : on_b_pos6;
+    step = 3 : on_c_pos2;
+    step = 6 : t3;
+    step >= 7: a_pos;
+    TRUE     : a_pos;
+  esac;
+
+  -- B
+  next(b_pos) := case
+    step = 4 : on_c_pos1;
+    step = 8 : t6;
+    step >= 9: b_pos;
+    TRUE     : b_pos;
+  esac;
+
+  -- C
+  next(c_pos) := c_pos; -- sempre em t1
+
+-- Especificação de planejamento
+CTLSPEC
+  ! EF GOAL_Sf3
